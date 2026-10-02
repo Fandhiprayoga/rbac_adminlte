@@ -23,6 +23,6 @@ class DashboardController extends BaseController
             'permissionCount' => count($authGroups->permissions),
         ];
 
-        return $this->renderView('dashboard/gentelella', $data, 'layouts/dashboard');
+        return $this->renderView('dashboard/adminlte', $data, 'layouts/adminlte');
     }
 }

@@ -17,9 +17,9 @@ $s = function (string $key) use ($settings) {
     height: 72px;
     padding: 8px;
     margin-bottom: 8px;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--bs-border-color);
     border-radius: 8px;
-    background: var(--color-surface-2);
+    background: var(--bs-tertiary-bg);
   }
   .brand-preview img {
     max-height: 100%;
@@ -37,495 +37,528 @@ $s = function (string $key) use ($settings) {
   }
 </style>
 
-<div class="page__section">
-  <div class="flex flex-col gap-4">
-    <nav class="w-full overflow-x-auto" aria-label="Bagian pengaturan">
-      <div class="btn-group" role="group" data-group="settings-tabs" aria-label="Pilih bagian pengaturan">
-        <button type="button" class="btn btn-outline <?= $activeTab === 'general' ? 'active' : '' ?>" aria-controls="settingsTabs" aria-pressed="<?= $activeTab === 'general' ? 'true' : 'false' ?>" data-stisla-tabs-value="general">Umum</button>
-        <button type="button" class="btn btn-outline <?= $activeTab === 'appearance' ? 'active' : '' ?>" aria-controls="settingsTabs" aria-pressed="<?= $activeTab === 'appearance' ? 'true' : 'false' ?>" data-stisla-tabs-value="appearance">Tampilan</button>
-        <button type="button" class="btn btn-outline <?= $activeTab === 'auth' ? 'active' : '' ?>" aria-controls="settingsTabs" aria-pressed="<?= $activeTab === 'auth' ? 'true' : 'false' ?>" data-stisla-tabs-value="auth">Autentikasi</button>
-        <button type="button" class="btn btn-outline <?= $activeTab === 'mail' ? 'active' : '' ?>" aria-controls="settingsTabs" aria-pressed="<?= $activeTab === 'mail' ? 'true' : 'false' ?>" data-stisla-tabs-value="mail">Email</button>
-      </div>
-    </nav>
+<div class="row">
+  <div class="col-12">
+    <ul class="nav nav-pills mb-4 overflow-x-auto flex-nowrap" id="settingsTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link text-nowrap <?= $activeTab === 'general' ? 'active' : '' ?>" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="<?= $activeTab === 'general' ? 'true' : 'false' ?>">Umum</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link text-nowrap <?= $activeTab === 'appearance' ? 'active' : '' ?>" id="appearance-tab" data-bs-toggle="tab" data-bs-target="#appearance" type="button" role="tab" aria-controls="appearance" aria-selected="<?= $activeTab === 'appearance' ? 'true' : 'false' ?>">Tampilan</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link text-nowrap <?= $activeTab === 'auth' ? 'active' : '' ?>" id="auth-tab" data-bs-toggle="tab" data-bs-target="#auth" type="button" role="tab" aria-controls="auth" aria-selected="<?= $activeTab === 'auth' ? 'true' : 'false' ?>">Autentikasi</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link text-nowrap <?= $activeTab === 'mail' ? 'active' : '' ?>" id="mail-tab" data-bs-toggle="tab" data-bs-target="#mail" type="button" role="tab" aria-controls="mail" aria-selected="<?= $activeTab === 'mail' ? 'true' : 'false' ?>">Email</button>
+      </li>
+    </ul>
 
-    <div class="w-full">
-      <div class="tabs" id="settingsTabs" data-stisla-tabs>
+    <div class="tab-content" id="settingsTabsContent">
 
-        <!-- ======================== TAB: UMUM ======================== -->
-        <div class="tabs__panel" data-value="general" data-state="<?= $activeTab === 'general' ? 'active' : 'inactive' ?>">
-          <div class="flex flex-col gap-6">
-            <section>
-              <form action="<?= base_url('admin/settings/update/general') ?>" method="post">
-                <?= csrf_field() ?>
-                <div class="card">
-                  <div class="card-header">
-                    <div>
-                      <div class="card-title">Pengaturan Umum</div>
-                      <div class="card-subtitle">Nama aplikasi, deskripsi, dan informasi dasar.</div>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="grid grid-cols-12 gap-4">
-                      <div class="col-span-12 sm:col-span-6">
-                        <div class="field">
-                          <label for="site_name" class="field__label">Nama Aplikasi <span class="text-danger">*</span></label>
-                          <input type="text" class="input" id="site_name" name="site_name"
-                                 value="<?= old('site_name', $s('App.siteName')) ?>" required>
-                        </div>
-                      </div>
-                      <div class="col-span-12 sm:col-span-6">
-                        <div class="field">
-                          <label for="site_name_short" class="field__label">Nama Pendek</label>
-                          <input type="text" class="input" id="site_name_short" name="site_name_short"
-                                 value="<?= old('site_name_short', $s('App.siteNameShort')) ?>" maxlength="10">
-                          <small class="text-muted-foreground text-xs">Maks 10 karakter, ditampilkan saat sidebar diminimalkan.</small>
-                        </div>
-                      </div>
-                      <div class="col-span-12">
-                        <div class="field">
-                          <label for="site_description" class="field__label">Deskripsi</label>
-                          <textarea class="input" id="site_description" name="site_description" rows="2"><?= old('site_description', $s('App.siteDescription')) ?></textarea>
-                        </div>
-                      </div>
-                      <div class="col-span-12 sm:col-span-8">
-                        <div class="field">
-                          <label for="site_footer" class="field__label">Teks Footer</label>
-                          <input type="text" class="input" id="site_footer" name="site_footer"
-                                 value="<?= old('site_footer', $s('App.siteFooter')) ?>">
-                        </div>
-                      </div>
-                      <div class="col-span-12 sm:col-span-4">
-                        <div class="field">
-                          <label for="site_version" class="field__label">Versi</label>
-                          <input type="text" class="input" id="site_version" name="site_version"
-                                 value="<?= old('site_version', $s('App.siteVersion')) ?>">
-                        </div>
+      <!-- ======================== TAB: UMUM ======================== -->
+      <div class="tab-pane fade <?= $activeTab === 'general' ? 'show active' : '' ?>" id="general" role="tabpanel" aria-labelledby="general-tab">
+        <div class="d-flex flex-column gap-4">
+          <section>
+            <form action="<?= base_url('admin/settings/update/general') ?>" method="post">
+              <?= csrf_field() ?>
+              <div class="card card-primary card-outline">
+                <div class="card-header">
+                  <h3 class="card-title mb-0">Pengaturan Umum</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="site_name" class="form-label">Nama Aplikasi <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="site_name" name="site_name"
+                               value="<?= old('site_name', $s('App.siteName')) ?>" required>
                       </div>
                     </div>
-                    <div class="flex justify-end mt-4">
-                      <button type="submit" class="btn btn-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.5" d="M17 21H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h6l7 7v7a4 4 0 0 1-4 4z" /><path fill="none" stroke="currentColor" stroke-width="1.5" d="M13 3v4a2 2 0 0 0 2 2h4" /></svg>
-                        Simpan
-                      </button>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="site_name_short" class="form-label">Nama Pendek</label>
+                        <input type="text" class="form-control" id="site_name_short" name="site_name_short"
+                               value="<?= old('site_name_short', $s('App.siteNameShort')) ?>" maxlength="10">
+                        <div class="form-text">Maks 10 karakter, ditampilkan saat sidebar diminimalkan.</div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="mb-3">
+                        <label for="site_description" class="form-label">Deskripsi</label>
+                        <textarea class="form-control" id="site_description" name="site_description" rows="2"><?= old('site_description', $s('App.siteDescription')) ?></textarea>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="mb-3">
+                        <label for="site_footer" class="form-label">Teks Footer</label>
+                        <input type="text" class="form-control" id="site_footer" name="site_footer"
+                               value="<?= old('site_footer', $s('App.siteFooter')) ?>">
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label for="site_version" class="form-label">Versi</label>
+                        <input type="text" class="form-control" id="site_version" name="site_version"
+                               value="<?= old('site_version', $s('App.siteVersion')) ?>">
+                      </div>
                     </div>
                   </div>
                 </div>
-              </form>
-            </section>
-
-            <section>
-              <form action="<?= base_url('admin/settings/update/branding') ?>" method="post" enctype="multipart/form-data">
-                <?= csrf_field() ?>
-                <div class="card">
-                  <div class="card-header">
-                    <div>
-                      <div class="card-title">Branding</div>
-                      <div class="card-subtitle">Logo dan favicon aplikasi.</div>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="grid grid-cols-12 gap-4">
-                      <div class="col-span-12 sm:col-span-6">
-                        <div class="field">
-                          <label class="field__label">Logo Aplikasi</label>
-                          <?php
-                            $currentLogo = $settings['App.siteLogo'] ?? '';
-                            $logoUrl = ! empty($currentLogo) ? base_url($currentLogo) : base_url('assets/img/stisla-fill.svg');
-                          ?>
-                          <div class="brand-preview">
-                            <img src="<?= $logoUrl ?>" alt="Current Logo" id="logoPreview">
-                            <?php if (empty($currentLogo)): ?>
-                              <span class="badge badge--soft badge--secondary">Default</span>
-                            <?php endif; ?>
-                          </div>
-                          <input type="file" class="input" id="site_logo" name="site_logo" accept="image/*"
-                                 onchange="previewImage(this, 'logoPreview')">
-                          <small class="text-muted-foreground text-xs">PNG, JPG, SVG, WebP. Maks 2MB.</small>
-                        </div>
-                      </div>
-                      <div class="col-span-12 sm:col-span-6">
-                        <div class="field">
-                          <label class="field__label">Favicon</label>
-                          <?php
-                            $currentFavicon = $settings['App.siteFavicon'] ?? '';
-                            $faviconUrl = ! empty($currentFavicon) ? base_url($currentFavicon) : base_url('assets/img/stisla-fill.svg');
-                          ?>
-                          <div class="brand-preview brand-preview--favicon">
-                            <img src="<?= $faviconUrl ?>" alt="Current Favicon" id="faviconPreview">
-                            <?php if (empty($currentFavicon)): ?>
-                              <span class="badge badge--soft badge--secondary">Default</span>
-                            <?php endif; ?>
-                          </div>
-                          <input type="file" class="input" id="site_favicon" name="site_favicon" accept="image/*,.ico"
-                                 onchange="previewImage(this, 'faviconPreview')">
-                          <small class="text-muted-foreground text-xs">PNG, ICO, SVG, WebP. Maks 1MB.</small>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                      <button type="submit" class="btn btn-primary">Upload Branding</button>
-                    </div>
-                  </div>
+                <div class="card-footer d-flex justify-content-end">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-floppy me-1"></i> Simpan
+                  </button>
                 </div>
-              </form>
-            </section>
+              </div>
+            </form>
+          </section>
 
-            <section>
-              <form action="<?= base_url('admin/settings/reset') ?>" method="post"
-                    onsubmit="return confirm('Reset pengaturan Umum & Branding ke default?')">
-                <?= csrf_field() ?>
-                <input type="hidden" name="tab" value="general">
-                <button type="submit" class="btn btn-danger btn-sm">Reset ke Default</button>
-              </form>
-            </section>
-          </div>
-        </div>
-
-        <!-- ======================== TAB: TAMPILAN ======================== -->
-        <div class="tabs__panel" data-value="appearance" data-state="<?= $activeTab === 'appearance' ? 'active' : 'inactive' ?>">
-          <div class="flex flex-col gap-6">
-            <section>
-              <form id="theme-settings" action="<?= base_url('admin/settings/update/appearance') ?>" method="post">
-                <?= csrf_field() ?>
-                <div class="theme-settings-layout">
-                  <div class="theme-settings-controls">
-                    <div class="card">
-                      <div class="card-header"><div class="card-title">Warna utama</div></div>
-                      <div class="card-body">
-                        <div class="theme-settings-swatches" aria-label="Pilih warna utama">
-                          <?php foreach (['#1ABB9C' => 'Teal', '#066fd1' => 'Biru', '#4263eb' => 'Indigo', '#ae3ec9' => 'Ungu', '#d6336c' => 'Merah muda', '#d63939' => 'Merah', '#f76707' => 'Oranye', '#f59f00' => 'Kuning', '#2fb344' => 'Hijau', '#17a2b8' => 'Sian', '#0f1623' => 'Hitam'] as $color => $label): ?>
-                            <button type="button" class="theme-settings-swatch" data-theme-color="<?= $color ?>" style="background:<?= $color ?>" title="<?= $label ?>" aria-label="<?= $label ?>" aria-pressed="false"></button>
-                          <?php endforeach; ?>
-                        </div>
-                        <div class="form-group" style="margin:14px 0 0">
-                          <label class="form-label" for="theme_primary">Warna kustom</label>
-                          <div class="theme-settings-color-input">
-                            <input type="color" id="theme_primary_picker" value="<?= esc(old('theme_primary', $s('App.themePrimary')), 'attr') ?>" aria-label="Pilih warna kustom">
-                            <input type="text" id="theme_primary" name="theme_primary" class="form-control" value="<?= esc(old('theme_primary', $s('App.themePrimary')), 'attr') ?>" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7" required>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="card">
-                      <div class="card-header"><div class="card-title">Sidebar</div></div>
-                      <div class="card-body">
-                        <div class="segmented theme-settings-options" role="radiogroup" aria-label="Gaya sidebar">
-                          <?php foreach (['dark' => 'Gelap', 'black' => 'Hitam', 'light' => 'Terang', 'brand' => 'Brand'] as $value => $label): ?>
-                            <label><input type="radio" name="theme_sidebar" value="<?= $value ?>" <?= old('theme_sidebar', $s('App.themeSidebar')) === $value ? 'checked' : '' ?>><span><?= $label ?></span></label>
-                          <?php endforeach; ?>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="card">
-                      <div class="card-header"><div class="card-title">Geometri</div></div>
-                      <div class="card-body">
-                        <div class="form-group">
-                          <label class="form-label" for="theme_radius">Radius sudut <output for="theme_radius" id="theme_radius_value"></output></label>
-                          <input class="slider" type="range" id="theme_radius" name="theme_radius" min="0" max="16" step="1" value="<?= esc(old('theme_radius', $s('App.themeRadius')), 'attr') ?>">
-                        </div>
-                        <div class="form-group">
-                          <label class="form-label" for="theme_sidebar_width">Lebar sidebar <output for="theme_sidebar_width" id="theme_sidebar_width_value"></output></label>
-                          <input class="slider" type="range" id="theme_sidebar_width" name="theme_sidebar_width" min="200" max="320" step="4" value="<?= esc(old('theme_sidebar_width', $s('App.themeSidebarWidth')), 'attr') ?>">
-                        </div>
-                        <div class="form-group" style="margin-bottom:0">
-                          <label class="form-label" for="theme_font_size">Ukuran teks <output for="theme_font_size" id="theme_font_size_value"></output></label>
-                          <input class="slider" type="range" id="theme_font_size" name="theme_font_size" min="13" max="16" step="0.5" value="<?= esc(old('theme_font_size', $s('App.themeFontSize')), 'attr') ?>">
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="card">
-                      <div class="card-header"><div class="card-title">Mode</div></div>
-                      <div class="card-body">
-                        <div class="segmented theme-settings-options" role="radiogroup" aria-label="Mode tampilan">
-                          <?php foreach (['system' => 'Sistem', 'light' => 'Terang', 'dark' => 'Gelap'] as $value => $label): ?>
-                            <label><input type="radio" name="theme_mode" value="<?= $value ?>" <?= old('theme_mode', $s('App.themeMode')) === $value ? 'checked' : '' ?>><span><?= $label ?></span></label>
-                          <?php endforeach; ?>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="theme-settings-preview">
-                    <div class="card">
-                      <div class="card-header"><div><div class="card-title">Pratinjau langsung</div><div class="card-subtitle">Perubahan terlihat sebelum disimpan.</div></div></div>
-                      <div class="card-body">
-                        <div class="theme-settings-sample">
-                          <div class="theme-settings-sample-nav">Menu utama<br><span>Dashboard</span><span>Pengaturan</span></div>
-                          <div class="theme-settings-sample-content">
-                            <strong>Tampilan aplikasi</strong>
-                            <p class="form-help">Warna, kontrol, dan bentuk komponen.</p>
-                            <div class="theme-settings-sample-actions"><span class="btn btn-primary">Utama</span><span class="btn btn-outline">Sekunder</span></div>
-                            <div class="form-group" style="margin:16px 0 0"><label class="form-label" for="theme_preview_field">Kolom input</label><input class="form-control" id="theme_preview_field" type="text" value="Contoh teks" readonly></div>
-                            <span class="badge badge-teal" style="margin-top:12px">Aktif</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="theme-settings-actions">
-                      <button type="reset" class="btn btn-outline">Batalkan perubahan</button>
-                      <button type="submit" class="btn btn-primary">Simpan tampilan</button>
-                    </div>
-                  </div>
+          <section>
+            <form action="<?= base_url('admin/settings/update/branding') ?>" method="post" enctype="multipart/form-data">
+              <?= csrf_field() ?>
+              <div class="card card-primary card-outline">
+                <div class="card-header">
+                  <h3 class="card-title mb-0">Branding</h3>
                 </div>
-
-              </form>
-            </section>
-
-            <section>
-                <form id="theme-settings-reset" action="<?= base_url('admin/settings/reset') ?>" method="post"
-                  onsubmit="return confirm('Reset pengaturan Tampilan ke default?')">
-                <?= csrf_field() ?>
-                <input type="hidden" name="tab" value="appearance">
-                <button type="submit" class="btn btn-danger btn-sm">Reset ke Default</button>
-              </form>
-            </section>
-          </div>
-        </div>
-
-        <!-- ======================== TAB: AUTENTIKASI ======================== -->
-        <div class="tabs__panel" data-value="auth" data-state="<?= $activeTab === 'auth' ? 'active' : 'inactive' ?>">
-          <div class="flex flex-col gap-6">
-            <section>
-              <form action="<?= base_url('admin/settings/update/auth') ?>" method="post">
-                <?= csrf_field() ?>
-                <div class="card">
-                  <div class="card-header">
-                    <div>
-                      <div class="card-title">Autentikasi & Registrasi</div>
-                      <div class="card-subtitle">Pengaturan role default, registrasi, dan mode pemeliharaan.</div>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="flex flex-col gap-4">
-                      <div class="field">
-                        <label for="default_role" class="field__label">Default Role <span class="text-danger">*</span></label>
-                        <select class="select" id="default_role" name="default_role">
-                          <?php foreach ($groups as $key => $group): ?>
-                            <option value="<?= $key ?>" <?= ($settings['App.defaultRole'] ?? 'user') === $key ? 'selected' : '' ?>>
-                              <?= esc($group['title']) ?>
-                            </option>
-                          <?php endforeach; ?>
-                        </select>
-                        <small class="text-muted-foreground text-xs">Role otomatis untuk user baru saat registrasi.</small>
-                      </div>
-
-                      <div class="flex items-center justify-between">
-                        <div>
-                          <label class="field__label mb-0" for="allow_registration">Izinkan Registrasi</label>
-                          <small class="text-muted-foreground text-xs">User baru bisa mendaftar sendiri.</small>
-                        </div>
-                           <label class="switch">
-                             <input type="checkbox" role="switch" id="allow_registration"
-                               name="allow_registration" value="1"
-                               <?= !empty($settings['Auth.allowRegistration']) ? 'checked' : '' ?>>
-                             <span class="track" aria-hidden="true"></span>
-                           </label>
-                      </div>
-
-                      <hr class="separator">
-
-                      <h3 class="text-sm font-semibold">Mode Pemeliharaan</h3>
-
-                      <div class="flex items-center justify-between">
-                        <div>
-                          <label class="field__label mb-0" for="maintenance_mode">Maintenance Mode</label>
-                          <small class="text-muted-foreground text-xs">Hanya Super Admin yang bisa mengakses sistem.</small>
-                        </div>
-                           <label class="switch">
-                             <input type="checkbox" role="switch" id="maintenance_mode"
-                               name="maintenance_mode" value="1"
-                               <?= ($settings['App.maintenanceMode'] ?? '0') === '1' ? 'checked' : '' ?>>
-                             <span class="track" aria-hidden="true"></span>
-                           </label>
-                      </div>
-
-                      <div class="field">
-                        <label for="maintenance_msg" class="field__label">Pesan Maintenance</label>
-                        <textarea class="input" id="maintenance_msg" name="maintenance_msg" rows="2"><?= old('maintenance_msg', $s('App.maintenanceMsg')) ?></textarea>
-                      </div>
-                    </div>
-
-                    <div class="flex justify-end mt-4">
-                      <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </section>
-
-            <section>
-              <form action="<?= base_url('admin/settings/reset') ?>" method="post"
-                    onsubmit="return confirm('Reset pengaturan Autentikasi ke default?')">
-                <?= csrf_field() ?>
-                <input type="hidden" name="tab" value="auth">
-                <button type="submit" class="btn btn-danger btn-sm">Reset ke Default</button>
-              </form>
-            </section>
-          </div>
-        </div>
-
-        <!-- ======================== TAB: EMAIL ======================== -->
-        <div class="tabs__panel" data-value="mail" data-state="<?= $activeTab === 'mail' ? 'active' : 'inactive' ?>">
-          <div class="flex flex-col gap-6">
-            <section>
-              <form action="<?= base_url('admin/settings/update/mail') ?>" method="post">
-                <?= csrf_field() ?>
-                <div class="card">
-                  <div class="card-header">
-                    <div>
-                      <div class="card-title">Konfigurasi Email</div>
-                      <div class="card-subtitle">Pengaturan SMTP dan identitas pengirim.</div>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="flex flex-col gap-4">
-                      <div class="field">
-                        <label for="mail_protocol" class="field__label">Protokol <span class="text-danger">*</span></label>
-                        <select class="select" id="mail_protocol" name="mail_protocol" onchange="toggleSmtp()">
-                          <?php $proto = $settings['Mail.protocol'] ?? 'smtp'; ?>
-                          <option value="smtp" <?= $proto === 'smtp' ? 'selected' : '' ?>>SMTP</option>
-                          <option value="sendmail" <?= $proto === 'sendmail' ? 'selected' : '' ?>>Sendmail</option>
-                          <option value="mail" <?= $proto === 'mail' ? 'selected' : '' ?>>PHP Mail</option>
-                        </select>
-                      </div>
-
-                      <div id="smtp-settings" class="flex flex-col gap-4">
-                        <div class="grid grid-cols-12 gap-4">
-                          <div class="col-span-12 sm:col-span-8">
-                            <div class="field">
-                              <label for="mail_hostname" class="field__label">SMTP Host</label>
-                              <input type="text" class="input" id="mail_hostname" name="mail_hostname"
-                                     value="<?= old('mail_hostname', $s('Mail.hostname')) ?>" placeholder="smtp.gmail.com">
-                            </div>
-                          </div>
-                          <div class="col-span-12 sm:col-span-4">
-                            <div class="field">
-                              <label for="mail_port" class="field__label">Port</label>
-                              <input type="number" class="input" id="mail_port" name="mail_port"
-                                     value="<?= old('mail_port', $s('Mail.port')) ?>" placeholder="587">
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="grid grid-cols-12 gap-4">
-                          <div class="col-span-12 sm:col-span-4">
-                            <div class="field">
-                              <label for="mail_encryption" class="field__label">Enkripsi</label>
-                              <?php $enc = $settings['Mail.encryption'] ?? 'tls'; ?>
-                              <select class="select" id="mail_encryption" name="mail_encryption">
-                                <option value="tls" <?= $enc === 'tls' ? 'selected' : '' ?>>TLS</option>
-                                <option value="ssl" <?= $enc === 'ssl' ? 'selected' : '' ?>>SSL</option>
-                                <option value="none" <?= $enc === 'none' ? 'selected' : '' ?>>Tanpa Enkripsi</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="col-span-12 sm:col-span-8">
-                            <div class="field">
-                              <label for="mail_username" class="field__label">Username</label>
-                              <input type="text" class="input" id="mail_username" name="mail_username"
-                                     value="<?= old('mail_username', $s('Mail.username')) ?>" placeholder="email@gmail.com" autocomplete="off">
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="field">
-                          <label for="mail_password" class="field__label">Password</label>
-                          <input type="password" class="input" id="mail_password" name="mail_password"
-                                 placeholder="Kosongkan jika tidak ingin mengubah" autocomplete="new-password">
-                          <?php if (! empty($settings['Mail.password'])): ?>
-                            <small class="text-success text-xs">✓ Password sudah diatur</small>
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Logo Aplikasi</label>
+                        <?php
+                          $currentLogo = $settings['App.siteLogo'] ?? '';
+                          $logoUrl = ! empty($currentLogo) ? base_url($currentLogo) : base_url('assets/img/stisla-fill.svg');
+                        ?>
+                        <div class="brand-preview">
+                          <img src="<?= $logoUrl ?>" alt="Current Logo" id="logoPreview">
+                          <?php if (empty($currentLogo)): ?>
+                            <span class="badge text-bg-secondary">Default</span>
                           <?php endif; ?>
                         </div>
+                        <input type="file" class="form-control" id="site_logo" name="site_logo" accept="image/*"
+                               onchange="previewImage(this, 'logoPreview')">
+                        <div class="form-text">PNG, JPG, SVG, WebP. Maks 2MB.</div>
                       </div>
-
-                      <hr class="separator">
-
-                      <h3 class="text-sm font-semibold">Identitas Pengirim</h3>
-
-                      <div class="grid grid-cols-12 gap-4">
-                        <div class="col-span-12 sm:col-span-6">
-                          <div class="field">
-                            <label for="mail_from_email" class="field__label">Email Pengirim</label>
-                            <input type="email" class="input" id="mail_from_email" name="mail_from_email"
-                                   value="<?= old('mail_from_email', $s('Mail.fromEmail')) ?>" placeholder="noreply@example.com">
-                          </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Favicon</label>
+                        <?php
+                          $currentFavicon = $settings['App.siteFavicon'] ?? '';
+                          $faviconUrl = ! empty($currentFavicon) ? base_url($currentFavicon) : base_url('assets/img/stisla-fill.svg');
+                        ?>
+                        <div class="brand-preview brand-preview--favicon">
+                          <img src="<?= $faviconUrl ?>" alt="Current Favicon" id="faviconPreview">
+                          <?php if (empty($currentFavicon)): ?>
+                            <span class="badge text-bg-secondary">Default</span>
+                          <?php endif; ?>
                         </div>
-                        <div class="col-span-12 sm:col-span-6">
-                          <div class="field">
-                            <label for="mail_from_name" class="field__label">Nama Pengirim</label>
-                            <input type="text" class="input" id="mail_from_name" name="mail_from_name"
-                                   value="<?= old('mail_from_name', $s('Mail.fromName')) ?>" placeholder="My App">
-                          </div>
+                        <input type="file" class="form-control" id="site_favicon" name="site_favicon" accept="image/*,.ico"
+                               onchange="previewImage(this, 'faviconPreview')">
+                        <div class="form-text">PNG, ICO, SVG, WebP. Maks 1MB.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer d-flex justify-content-end">
+                  <button type="submit" class="btn btn-primary">Upload Branding</button>
+                </div>
+              </div>
+            </form>
+          </section>
+
+          <section>
+            <form action="<?= base_url('admin/settings/reset') ?>" method="post"
+                  onsubmit="return confirm('Reset pengaturan Umum & Branding ke default?')">
+              <?= csrf_field() ?>
+              <input type="hidden" name="tab" value="general">
+              <button type="submit" class="btn btn-danger btn-sm">Reset ke Default</button>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      <!-- ======================== TAB: TAMPILAN ======================== -->
+      <div class="tab-pane fade <?= $activeTab === 'appearance' ? 'show active' : '' ?>" id="appearance" role="tabpanel" aria-labelledby="appearance-tab">
+        <?php
+        $bootstrapBg = [
+            'bg-primary' => 'Primary', 'bg-secondary' => 'Secondary', 'bg-success' => 'Success',
+            'bg-danger' => 'Danger', 'bg-warning' => 'Warning', 'bg-info' => 'Info',
+            'bg-light' => 'Light', 'bg-dark' => 'Dark', 'bg-body' => 'Body',
+            'bg-body-secondary' => 'Body secondary', 'bg-body-tertiary' => 'Body tertiary',
+            'bg-white' => 'White', 'bg-black' => 'Black', 'bg-transparent' => 'Transparent',
+        ];
+        $paletteColors = ['orange', 'amber', 'olive', 'teal', 'sky', 'indigo', 'violet', 'fuchsia', 'pink', 'navy', 'steel', 'slate', 'graphite', 'midnight'];
+        $bgOptions = $bootstrapBg;
+        foreach ($paletteColors as $c) {
+            $bgOptions['text-bg-' . $c] = ucfirst($c) . ' (palette)';
+        }
+        ?>
+        <div class="d-flex flex-column gap-4">
+          <section>
+            <form id="theme-settings" action="<?= base_url('admin/settings/update/appearance') ?>" method="post">
+              <?= csrf_field() ?>
+              <div class="row g-4">
+                <div class="col-lg-6">
+                  <div class="card card-primary card-outline mb-4">
+                    <div class="card-header"><h3 class="card-title mb-0">Warna utama</h3></div>
+                    <div class="card-body">
+                      <div class="d-flex flex-wrap gap-2 mb-3" aria-label="Pilih warna utama">
+                        <?php foreach (['#1ABB9C' => 'Teal', '#066fd1' => 'Biru', '#4263eb' => 'Indigo', '#ae3ec9' => 'Ungu', '#d6336c' => 'Merah muda', '#d63939' => 'Merah', '#f76707' => 'Oranye', '#f59f00' => 'Kuning', '#2fb344' => 'Hijau', '#17a2b8' => 'Sian', '#0f1623' => 'Hitam'] as $color => $label): ?>
+                          <button type="button" class="btn rounded-circle p-0" style="width:32px;height:32px;background:<?= $color ?>" data-theme-color="<?= $color ?>" title="<?= $label ?>" aria-label="<?= $label ?>"></button>
+                        <?php endforeach; ?>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label" for="theme_primary">Warna kustom</label>
+                        <div class="input-group">
+                          <input type="color" class="form-control form-control-color" id="theme_primary_picker" value="<?= esc(old('theme_primary', $s('App.themePrimary')), 'attr') ?>" aria-label="Pilih warna kustom">
+                          <input type="text" id="theme_primary" name="theme_primary" class="form-control" value="<?= esc(old('theme_primary', $s('App.themePrimary')), 'attr') ?>" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7" required>
+                        </div>
+                      </div>
+                      <div class="mb-0">
+                        <label class="form-label" for="theme_primary_color">Palette utama (data-lte-primary)</label>
+                        <select class="form-select" id="theme_primary_color" name="theme_primary_color">
+                          <option value="">— Biru bawaan Bootstrap —</option>
+                          <?php foreach ($paletteColors as $c): ?>
+                          <option value="<?= $c ?>" <?= old('theme_primary_color', $s('App.themePrimaryColor')) === $c ? 'selected' : '' ?>><?= ucfirst($c) ?></option>
+                          <?php endforeach; ?>
+                        </select>
+                        <div class="form-text">Rewire komponen Bootstrap (tombol, link, checkbox) ke warna palette.</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card card-primary card-outline mb-4">
+                    <div class="card-header"><h3 class="card-title mb-0">Mode</h3></div>
+                    <div class="card-body">
+                      <div class="btn-group w-100" role="group" aria-label="Mode tampilan">
+                        <?php foreach (['system' => 'Sistem', 'light' => 'Terang', 'dark' => 'Gelap'] as $value => $label): ?>
+                          <input type="radio" class="btn-check" name="theme_mode" id="mode_<?= $value ?>" value="<?= $value ?>" <?= old('theme_mode', $s('App.themeMode')) === $value ? 'checked' : '' ?>>
+                          <label class="btn btn-outline-secondary" for="mode_<?= $value ?>"><?= $label ?></label>
+                        <?php endforeach; ?>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card card-primary card-outline mb-4">
+                    <div class="card-header"><h3 class="card-title mb-0">Bentuk &amp; ukuran</h3></div>
+                    <div class="card-body">
+                      <div class="mb-3">
+                        <label class="form-label" for="theme_radius">Radius (<span id="radius-out"><?= esc(old('theme_radius', $s('App.themeRadius')), 'attr') ?></span>px)</label>
+                        <input type="range" class="form-range" id="theme_radius" name="theme_radius" min="0" max="16" step="1" value="<?= esc(old('theme_radius', $s('App.themeRadius')), 'attr') ?>" required>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label" for="theme_sidebar_width">Lebar sidebar (<span id="sw-out"><?= esc(old('theme_sidebar_width', $s('App.themeSidebarWidth')), 'attr') ?></span>px)</label>
+                        <input type="range" class="form-range" id="theme_sidebar_width" name="theme_sidebar_width" min="200" max="320" step="4" value="<?= esc(old('theme_sidebar_width', $s('App.themeSidebarWidth')), 'attr') ?>" required>
+                      </div>
+                      <div class="mb-0">
+                        <label class="form-label" for="theme_font_size">Ukuran font</label>
+                        <select class="form-select" id="theme_font_size" name="theme_font_size" required>
+                          <?php foreach (['13', '13.5', '14', '14.5', '15', '15.5', '16'] as $fs): ?>
+                          <option value="<?= $fs ?>" <?= (string) old('theme_font_size', $s('App.themeFontSize')) === $fs ? 'selected' : '' ?>><?= $fs ?>px</option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <?php
+                  $regions = [
+                      ['sidebar', 'Sidebar', 'App.themeSidebarBg', 'App.themeSidebarTheme', 'bg-body-secondary', 'dark'],
+                      ['navbar', 'Navbar', 'App.themeNavbarBg', 'App.themeNavbarTheme', 'bg-body', 'light'],
+                      ['footer', 'Footer', 'App.themeFooterBg', 'App.themeFooterTheme', 'bg-body', 'light'],
+                  ];
+                  foreach ($regions as [$key, $label, $bgKey, $themeKey, $bgDefault, $themeDefault]):
+                  ?>
+                  <div class="card card-primary card-outline mb-4">
+                    <div class="card-header"><h3 class="card-title mb-0"><?= $label ?> theme</h3></div>
+                    <div class="card-body">
+                      <div class="row g-3">
+                        <div class="col-sm-6">
+                          <label class="form-label" for="theme_<?= $key ?>_theme">Color mode</label>
+                          <select class="form-select" id="theme_<?= $key ?>_theme" name="theme_<?= $key ?>_theme">
+                            <?php foreach (['light' => 'Light', 'dark' => 'Dark'] as $v => $l): ?>
+                            <option value="<?= $v ?>" <?= old("theme_{$key}_theme", $s($themeKey) ?: $themeDefault) === $v ? 'selected' : '' ?>><?= $l ?></option>
+                            <?php endforeach; ?>
+                          </select>
+                        </div>
+                        <div class="col-sm-6">
+                          <label class="form-label" for="theme_<?= $key ?>_bg">Background</label>
+                          <select class="form-select" id="theme_<?= $key ?>_bg" name="theme_<?= $key ?>_bg">
+                            <?php foreach ($bgOptions as $v => $l): ?>
+                            <option value="<?= $v ?>" <?= old("theme_{$key}_bg", $s($bgKey) ?: $bgDefault) === $v ? 'selected' : '' ?>><?= $l ?></option>
+                            <?php endforeach; ?>
+                          </select>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <?php endforeach; ?>
 
-                    <div class="flex justify-between items-center mt-4">
-                      <button type="button" class="btn btn-outline btn-sm" onclick="openTestEmail()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" /><path stroke-linecap="round" d="m6 8l2.159 1.8c1.837 1.53 2.755 2.295 3.841 2.295s2.005-.765 3.841-2.296L18 8" /></g></svg>
-                        Test Email
-                      </button>
+                  <div class="card card-primary card-outline">
+                    <div class="card-header">
+                      <h3 class="card-title mb-0">Pratinjau langsung</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="border rounded p-3 mb-3" style="background: var(--bs-body-bg); color: var(--bs-body-color);">
+                        <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+                          <span class="fw-bold">Menu utama</span>
+                          <span class="text-muted">Dashboard</span>
+                        </div>
+                        <strong>Tampilan aplikasi</strong>
+                        <p class="text-muted small">Warna, kontrol, dan bentuk komponen.</p>
+                        <div class="d-flex gap-2">
+                          <span class="btn btn-primary">Utama</span>
+                          <span class="btn btn-outline-secondary">Sekunder</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end gap-2">
+                      <button type="reset" class="btn btn-outline-secondary">Batal</button>
                       <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                   </div>
                 </div>
-              </form>
-            </section>
+              </div>
+            </form>
+          </section>
 
-            <section>
-              <form action="<?= base_url('admin/settings/reset') ?>" method="post"
-                    onsubmit="return confirm('Reset pengaturan Email ke default?')">
-                <?= csrf_field() ?>
-                <input type="hidden" name="tab" value="mail">
-                <button type="submit" class="btn btn-danger btn-sm">Reset ke Default</button>
-              </form>
-            </section>
-          </div>
+          <section>
+            <form id="theme-settings-reset" action="<?= base_url('admin/settings/reset') ?>" method="post"
+                  onsubmit="return confirm('Reset pengaturan Tampilan ke default?')">
+              <?= csrf_field() ?>
+              <input type="hidden" name="tab" value="appearance">
+              <button type="submit" class="btn btn-danger btn-sm">Reset ke Default</button>
+            </form>
+          </section>
         </div>
-
       </div>
+
+      <!-- ======================== TAB: AUTENTIKASI ======================== -->
+      <div class="tab-pane fade <?= $activeTab === 'auth' ? 'show active' : '' ?>" id="auth" role="tabpanel" aria-labelledby="auth-tab">
+        <div class="d-flex flex-column gap-4">
+          <section>
+            <form action="<?= base_url('admin/settings/update/auth') ?>" method="post">
+              <?= csrf_field() ?>
+              <div class="card card-primary card-outline">
+                <div class="card-header">
+                  <h3 class="card-title mb-0">Pengaturan Autentikasi</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="auth_allow_registration" class="form-label">Registrasi Publik</label>
+                        <?php $reg = $settings['Auth.allowRegistration'] ?? 'true'; ?>
+                        <select class="form-select" id="auth_allow_registration" name="auth_allow_registration">
+                          <option value="true" <?= $reg === 'true' ? 'selected' : '' ?>>Diizinkan</option>
+                          <option value="false" <?= $reg === 'false' ? 'selected' : '' ?>>Ditutup</option>
+                        </select>
+                        <div class="form-text">Izinkan pengunjung membuat akun baru.</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="auth_allow_magic_link" class="form-label">Login Magic Link</label>
+                        <?php $magic = $settings['Auth.allowMagicLinkLogins'] ?? 'false'; ?>
+                        <select class="form-select" id="auth_allow_magic_link" name="auth_allow_magic_link">
+                          <option value="true" <?= $magic === 'true' ? 'selected' : '' ?>>Aktif</option>
+                          <option value="false" <?= $magic === 'false' ? 'selected' : '' ?>>Nonaktif</option>
+                        </select>
+                        <div class="form-text">Izinkan login menggunakan link yang dikirim ke email.</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="auth_allow_remembering" class="form-label">Fitur "Ingat Saya"</label>
+                        <?php $rem = $settings['Auth.sessionConfig']['allowRemembering'] ?? 'true'; ?>
+                        <select class="form-select" id="auth_allow_remembering" name="auth_allow_remembering">
+                          <option value="true" <?= $rem === 'true' ? 'selected' : '' ?>>Aktif</option>
+                          <option value="false" <?= $rem === 'false' ? 'selected' : '' ?>>Nonaktif</option>
+                        </select>
+                        <div class="form-text">Tampilkan opsi "Ingat Saya" di halaman login.</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="auth_remember_length" class="form-label">Durasi "Ingat Saya" (Hari)</label>
+                        <?php
+                          $remLen = $settings['Auth.sessionConfig']['rememberLength'] ?? (30 * 24 * 60 * 60);
+                          $remDays = $remLen / (24 * 60 * 60);
+                        ?>
+                        <input type="number" class="form-control" id="auth_remember_length" name="auth_remember_length"
+                               value="<?= old('auth_remember_length', $remDays) ?>" min="1" max="365">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer d-flex justify-content-end">
+                  <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+              </div>
+            </form>
+          </section>
+
+          <section>
+            <form action="<?= base_url('admin/settings/reset') ?>" method="post"
+                  onsubmit="return confirm('Reset pengaturan Autentikasi ke default?')">
+              <?= csrf_field() ?>
+              <input type="hidden" name="tab" value="auth">
+              <button type="submit" class="btn btn-danger btn-sm">Reset ke Default</button>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      <!-- ======================== TAB: EMAIL ======================== -->
+      <div class="tab-pane fade <?= $activeTab === 'mail' ? 'show active' : '' ?>" id="mail" role="tabpanel" aria-labelledby="mail-tab">
+        <div class="d-flex flex-column gap-4">
+          <section>
+            <form action="<?= base_url('admin/settings/update/mail') ?>" method="post">
+              <?= csrf_field() ?>
+              <div class="card card-primary card-outline">
+                <div class="card-header">
+                  <h3 class="card-title mb-0">Pengaturan Email</h3>
+                </div>
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label for="mail_protocol" class="form-label">Protokol</label>
+                    <?php $proto = $settings['Mail.protocol'] ?? 'smtp'; ?>
+                    <select class="form-select" id="mail_protocol" name="mail_protocol" onchange="toggleSmtp()">
+                      <option value="smtp" <?= $proto === 'smtp' ? 'selected' : '' ?>>SMTP</option>
+                      <option value="mail" <?= $proto === 'mail' ? 'selected' : '' ?>>Mail (PHP mail())</option>
+                      <option value="sendmail" <?= $proto === 'sendmail' ? 'selected' : '' ?>>Sendmail</option>
+                    </select>
+                  </div>
+
+                  <div id="smtp-settings">
+                    <hr class="my-4">
+                    <h5 class="fs-6 fw-semibold mb-3">Kredensial SMTP</h5>
+
+                    <div class="row g-3">
+                      <div class="col-md-8">
+                        <div class="mb-3">
+                          <label for="mail_hostname" class="form-label">Hostname</label>
+                          <input type="text" class="form-control" id="mail_hostname" name="mail_hostname"
+                                 value="<?= old('mail_hostname', $s('Mail.hostname')) ?>" placeholder="smtp.gmail.com">
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="mb-3">
+                          <label for="mail_port" class="form-label">Port</label>
+                          <input type="number" class="form-control" id="mail_port" name="mail_port"
+                                 value="<?= old('mail_port', $s('Mail.port')) ?>" placeholder="587">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row g-3">
+                      <div class="col-md-4">
+                        <div class="mb-3">
+                          <label for="mail_encryption" class="form-label">Enkripsi</label>
+                          <?php $enc = $settings['Mail.encryption'] ?? 'tls'; ?>
+                          <select class="form-select" id="mail_encryption" name="mail_encryption">
+                            <option value="tls" <?= $enc === 'tls' ? 'selected' : '' ?>>TLS</option>
+                            <option value="ssl" <?= $enc === 'ssl' ? 'selected' : '' ?>>SSL</option>
+                            <option value="none" <?= $enc === 'none' ? 'selected' : '' ?>>Tanpa Enkripsi</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="mb-3">
+                          <label for="mail_username" class="form-label">Username</label>
+                          <input type="text" class="form-control" id="mail_username" name="mail_username"
+                                 value="<?= old('mail_username', $s('Mail.username')) ?>" placeholder="email@gmail.com" autocomplete="off">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="mail_password" class="form-label">Password</label>
+                      <input type="password" class="form-control" id="mail_password" name="mail_password"
+                             placeholder="Kosongkan jika tidak ingin mengubah" autocomplete="new-password">
+                      <?php if (! empty($settings['Mail.password'])): ?>
+                        <div class="form-text text-success"><i class="bi bi-check-circle"></i> Password sudah diatur</div>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+
+                  <hr class="my-4">
+                  <h5 class="fs-6 fw-semibold mb-3">Identitas Pengirim</h5>
+
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="mail_from_email" class="form-label">Email Pengirim</label>
+                        <input type="email" class="form-control" id="mail_from_email" name="mail_from_email"
+                               value="<?= old('mail_from_email', $s('Mail.fromEmail')) ?>" placeholder="noreply@example.com">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="mail_from_name" class="form-label">Nama Pengirim</label>
+                        <input type="text" class="form-control" id="mail_from_name" name="mail_from_name"
+                               value="<?= old('mail_from_name', $s('Mail.fromName')) ?>" placeholder="My App">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                  <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#testEmailModal">
+                    <i class="bi bi-envelope me-1"></i> Test Email
+                  </button>
+                  <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+              </div>
+            </form>
+          </section>
+
+          <section>
+            <form action="<?= base_url('admin/settings/reset') ?>" method="post"
+                  onsubmit="return confirm('Reset pengaturan Email ke default?')">
+              <?= csrf_field() ?>
+              <input type="hidden" name="tab" value="mail">
+              <button type="submit" class="btn btn-danger btn-sm">Reset ke Default</button>
+            </form>
+          </section>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- Dialog: Test Email -->
-<div class="dialog dialog--sm" id="testEmailDialog" data-stisla-dialog data-state="closed" role="dialog" aria-modal="true" aria-labelledby="testEmailDialogTitle" aria-hidden="true" tabindex="-1">
-  <div class="dialog__backdrop" data-stisla-dialog-dismiss></div>
-  <div class="dialog__panel">
-    <div class="dialog__content">
-      <div class="dialog__header">
-        <h3 class="dialog__title" id="testEmailDialogTitle">Test Kirim Email</h3>
-        <button type="button" class="dialog__close" aria-label="Tutup" data-stisla-dialog-dismiss>
-          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 6l12 12M18 6L6 18" />
-          </svg>
-        </button>
+<!-- Modal: Test Email -->
+<div class="modal fade" id="testEmailModal" tabindex="-1" aria-labelledby="testEmailModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="testEmailModalLabel">Test Kirim Email</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="dialog__body">
-        <p class="text-muted-foreground text-sm mb-4">Kirim email percobaan menggunakan konfigurasi SMTP yang sudah disimpan.</p>
+      <div class="modal-body">
 
-        <div id="testEmailResult" class="hidden"></div>
+        <div id="testEmailResult" class="d-none alert"></div>
 
-        <div class="flex flex-col gap-3">
-          <div class="field">
-            <label for="test_email_to" class="field__label">Alamat Email Tujuan <span class="text-danger">*</span></label>
-            <input type="email" class="input" id="test_email_to" placeholder="contoh@email.com" required>
-          </div>
-          <div class="field">
-            <label for="test_email_subject" class="field__label">Subjek</label>
-            <input type="text" class="input" id="test_email_subject" value="Test Email - <?= esc(setting('App.siteName') ?? 'CI4 Shield RBAC') ?>">
-          </div>
-          <div class="field">
-            <label for="test_email_message" class="field__label">Pesan</label>
-            <textarea class="input" id="test_email_message" rows="3">Ini adalah email percobaan dari <?= esc(setting('App.siteName') ?? 'CI4 Shield RBAC') ?>. Jika Anda menerima email ini, konfigurasi SMTP sudah benar.</textarea>
-          </div>
+        <div class="mb-3">
+          <label for="test_email_to" class="form-label">Alamat Email Tujuan <span class="text-danger">*</span></label>
+          <input type="email" class="form-control" id="test_email_to" placeholder="contoh@email.com" required>
+        </div>
+        <div class="mb-3">
+          <label for="test_email_subject" class="form-label">Subjek</label>
+          <input type="text" class="form-control" id="test_email_subject" value="Test Email - <?= esc(setting('App.siteName') ?? 'CI4 Shield RBAC') ?>">
+        </div>
+        <div class="mb-3">
+          <label for="test_email_message" class="form-label">Pesan</label>
+          <textarea class="form-control" id="test_email_message" rows="3">Ini adalah email percobaan dari <?= esc(setting('App.siteName') ?? 'CI4 Shield RBAC') ?>. Jika Anda menerima email ini, konfigurasi SMTP sudah benar.</textarea>
         </div>
       </div>
-      <div class="dialog__footer">
-        <button type="button" class="btn btn-outline" data-stisla-dialog-dismiss>Batal</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
         <button type="button" class="btn btn-primary" id="btnSendTestEmail">Kirim</button>
       </div>
     </div>
@@ -533,49 +566,6 @@ $s = function (string $key) use ($settings) {
 </div>
 
 <script>
-  (function() {
-    var tabs = document.getElementById('settingsTabs');
-    if (!tabs) return;
-
-    var buttons = document.querySelectorAll('[data-stisla-tabs-value][aria-controls="settingsTabs"]');
-    var panels = tabs.querySelectorAll('.tabs__panel[data-value]');
-
-    function activateTab(value) {
-      var selectedButton = Array.prototype.find.call(buttons, function(button) {
-        return button.dataset.stislaTabsValue === value;
-      });
-      if (!selectedButton) selectedButton = buttons[0];
-      if (!selectedButton) return;
-
-      value = selectedButton.dataset.stislaTabsValue;
-      buttons.forEach(function(button) {
-        var isSelected = button === selectedButton;
-        button.classList.toggle('active', isSelected);
-        button.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
-      });
-      panels.forEach(function(panel) {
-        panel.dataset.state = panel.dataset.value === value ? 'active' : 'inactive';
-      });
-    }
-
-    buttons.forEach(function(button) {
-      button.addEventListener('click', function() {
-        var value = button.dataset.stislaTabsValue;
-        activateTab(value);
-
-        var url = new URL(window.location.href);
-        url.searchParams.set('tab', value);
-        window.history.pushState({ tab: value }, '', url);
-      });
-    });
-
-    window.addEventListener('popstate', function() {
-      activateTab(new URL(window.location.href).searchParams.get('tab'));
-    });
-
-    activateTab(new URL(window.location.href).searchParams.get('tab') || <?= json_encode($activeTab) ?>);
-  })();
-
   function previewImage(input, previewId) {
     if (input.files && input.files[0]) {
       var reader = new FileReader();
@@ -590,35 +580,6 @@ $s = function (string $key) use ($settings) {
     if (smtp) smtp.style.display = proto === 'smtp' ? '' : 'none';
   }
 
-  function openTestEmail() {
-    var dialog = document.getElementById('testEmailDialog');
-    if (!dialog) return;
-    var resultDiv = document.getElementById('testEmailResult');
-    var btn = document.getElementById('btnSendTestEmail');
-    if (resultDiv) {
-      resultDiv.className = 'hidden';
-      resultDiv.textContent = '';
-    }
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = 'Kirim';
-    }
-    dialog.dataset.state = 'open';
-    dialog.setAttribute('aria-hidden', 'false');
-  }
-
-  function closeTestEmail() {
-    var dialog = document.getElementById('testEmailDialog');
-    if (dialog) {
-      dialog.dataset.state = 'closed';
-      dialog.setAttribute('aria-hidden', 'true');
-    }
-  }
-
-  document.querySelectorAll('[data-stisla-dialog-dismiss]').forEach(function(el) {
-    el.addEventListener('click', closeTestEmail);
-  });
-
   document.getElementById('btnSendTestEmail').addEventListener('click', function() {
     var btn = this;
     var resultDiv = document.getElementById('testEmailResult');
@@ -627,17 +588,15 @@ $s = function (string $key) use ($settings) {
     var message = document.getElementById('test_email_message').value.trim();
 
     if (!emailTo) {
-      resultDiv.className = 'mb-3 p-3 rounded text-sm';
-      resultDiv.style.background = 'var(--color-warning-subtle, #fff3cd)';
-      resultDiv.style.color = 'var(--color-warning, #856404)';
+      resultDiv.className = 'alert alert-warning mb-3';
       resultDiv.textContent = 'Alamat email tujuan wajib diisi.';
-      resultDiv.classList.remove('hidden');
+      resultDiv.classList.remove('d-none');
       return;
     }
 
     btn.disabled = true;
     btn.textContent = 'Mengirim...';
-    resultDiv.classList.add('hidden');
+    resultDiv.classList.add('d-none');
 
     fetch('<?= base_url('admin/settings/test-email') ?>', {
       method: 'POST',
@@ -650,22 +609,17 @@ $s = function (string $key) use ($settings) {
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      resultDiv.classList.remove('hidden');
-      resultDiv.className = 'mb-3 p-3 rounded text-sm';
+      resultDiv.classList.remove('d-none');
       if (data.success) {
-        resultDiv.style.background = 'var(--color-success-subtle, #d4edda)';
-        resultDiv.style.color = 'var(--color-success, #155724)';
+        resultDiv.className = 'alert alert-success mb-3';
       } else {
-        resultDiv.style.background = 'var(--color-danger-subtle, #f8d7da)';
-        resultDiv.style.color = 'var(--color-danger, #721c24)';
+        resultDiv.className = 'alert alert-danger mb-3';
       }
       resultDiv.textContent = data.message;
     })
     .catch(function() {
-      resultDiv.classList.remove('hidden');
-      resultDiv.className = 'mb-3 p-3 rounded text-sm';
-      resultDiv.style.background = 'var(--color-danger-subtle, #f8d7da)';
-      resultDiv.style.color = 'var(--color-danger, #721c24)';
+      resultDiv.classList.remove('d-none');
+      resultDiv.className = 'alert alert-danger mb-3';
       resultDiv.textContent = 'Terjadi kesalahan saat mengirim email.';
     })
     .finally(function() {
@@ -675,38 +629,35 @@ $s = function (string $key) use ($settings) {
   });
 
   toggleSmtp();
+  
+  // Update URL hash when tab changes
+  var tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
+  tabEls.forEach(function(tabEl) {
+    tabEl.addEventListener('shown.bs.tab', function (event) {
+      var value = event.target.id.replace('-tab', '');
+      var url = new URL(window.location.href);
+      url.searchParams.set('tab', value);
+      window.history.pushState({ tab: value }, '', url);
+    });
+  });
 </script>
 <script>
   (function () {
     var form = document.getElementById('theme-settings');
+    if (!form) return;
     var root = document.documentElement;
     var primary = document.getElementById('theme_primary');
     var picker = document.getElementById('theme_primary_picker');
     var swatches = form.querySelectorAll('[data-theme-color]');
-    var sliders = ['theme_radius', 'theme_sidebar_width', 'theme_font_size'];
 
     function refreshTheme() {
       var color = primary.value.trim();
       if (/^#[0-9a-f]{6}$/i.test(color)) {
-        root.style.setProperty('--primary', color);
+        root.style.setProperty('--bs-primary', color);
         picker.value = color;
       }
-      swatches.forEach(function (swatch) {
-        swatch.setAttribute('aria-pressed', String(swatch.dataset.themeColor.toLowerCase() === color.toLowerCase()));
-      });
-      root.dataset.sidebarStyle = form.querySelector('[name="theme_sidebar"]:checked').value;
-      sliders.forEach(function (id) {
-        var slider = document.getElementById(id);
-        document.getElementById(id + '_value').value = slider.value + ' px';
-      });
-      var radius = Number(document.getElementById('theme_radius').value);
-      root.style.setProperty('--radius', radius + 'px');
-      root.style.setProperty('--radius-sm', Math.max(0, radius - 2) + 'px');
-      root.style.setProperty('--radius-lg', radius + 2 + 'px');
-      root.style.setProperty('--sidebar-w', document.getElementById('theme_sidebar_width').value + 'px');
-      root.style.setProperty('--font-size', Number(document.getElementById('theme_font_size').value) / 16 + 'rem');
       var mode = form.querySelector('[name="theme_mode"]:checked').value;
-      root.dataset.theme = mode === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : mode;
+      root.dataset.bsTheme = mode === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : mode;
     }
 
     swatches.forEach(function (swatch) {
@@ -722,18 +673,36 @@ $s = function (string $key) use ($settings) {
       input.addEventListener('change', refreshTheme);
     });
     form.addEventListener('reset', function () { requestAnimationFrame(function () { refreshTheme(); }); });
-    form.addEventListener('submit', function () {
-      var mode = form.querySelector('[name="theme_mode"]:checked').value;
-      try {
-        if (mode === 'system') localStorage.removeItem('theme');
-        else localStorage.setItem('theme', mode);
-      } catch (error) {}
-    });
-    document.getElementById('theme-settings-reset').addEventListener('submit', function (event) {
-      if (!event.defaultPrevented) {
-        try { localStorage.removeItem('theme'); } catch (error) {}
-      }
-    });
     refreshTheme();
+  })();
+</script>
+<script>
+  (function () {
+    var form = document.getElementById('theme-settings');
+    if (!form) return;
+    var pairs = [['theme_radius', 'radius-out'], ['theme_sidebar_width', 'sw-out']];
+    pairs.forEach(function (pair) {
+      var input = document.getElementById(pair[0]);
+      var out = document.getElementById(pair[1]);
+      if (!input || !out) return;
+      var sync = function () { out.textContent = input.value; };
+      input.addEventListener('input', sync);
+      form.addEventListener('reset', function () { requestAnimationFrame(sync); });
+      sync();
+    });
+
+    var palette = document.getElementById('theme_primary_color');
+    if (palette) {
+      var apply = function () {
+        if (palette.value) {
+          document.documentElement.setAttribute('data-lte-primary', palette.value);
+        } else {
+          document.documentElement.removeAttribute('data-lte-primary');
+        }
+      };
+      palette.addEventListener('change', apply);
+      form.addEventListener('reset', function () { requestAnimationFrame(apply); });
+      apply();
+    }
   })();
 </script>

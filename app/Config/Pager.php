@@ -25,6 +25,8 @@ class Pager extends BaseConfig
         'default_simple' => 'CodeIgniter\Pager\Views\default_simple',
         'default_head'   => 'CodeIgniter\Pager\Views\default_head',
         'gentelella'     => 'App\Views\pagers\gentelella',
+        'adminlte'       => 'App\Views\pagers\adminlte',
+        'default'        => 'App\Views\pagers\adminlte',
     ];
 
     /**

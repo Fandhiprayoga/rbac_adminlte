@@ -1,53 +1,51 @@
-<div class="page__section">
-  <div class="card" style="max-width: 720px; margin: 0 auto;">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Edit User: <?= esc($user_edit->username) ?></div>
-        <div class="card-subtitle">Perbarui informasi akun dan role pengguna.</div>
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-7">
+    <div class="card card-primary card-outline">
+      <div class="card-header">
+        <h3 class="card-title mb-0">Edit User: <?= esc($user_edit->username) ?></h3>
+        <div class="text-muted small">Perbarui informasi akun dan role pengguna.</div>
       </div>
-    </div>
-    <div class="card-body">
       <form action="<?= base_url('admin/users/update/' . $user_edit->id) ?>" method="post">
         <?= csrf_field() ?>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label" for="username">Username <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="username" name="username"
+                   value="<?= old('username', $user_edit->username) ?>" required>
+          </div>
 
-        <div class="form-group">
-          <label class="form-label" for="username">Username <span class="required">*</span></label>
-          <input type="text" class="form-control" id="username" name="username"
-                 value="<?= old('username', $user_edit->username) ?>" required>
+          <div class="mb-3">
+            <label class="form-label" for="email">Email <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="email" name="email"
+                   value="<?= old('email', $user_edit->email) ?>" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+            <div class="form-text">Kosongkan jika tidak ingin mengubah password. Minimal 8 karakter.</div>
+          </div>
+
+          <?php if (activeGroupCan('users.manage-roles')): ?>
+          <div class="mb-3">
+            <label class="form-label d-block">Role <span class="text-muted small">(bisa pilih lebih dari satu)</span></label>
+            <?php foreach ($groups as $key => $group): ?>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="role-<?= esc($key) ?>" name="groups[]" value="<?= $key ?>"
+                       <?= in_array($key, $userGroups) ? 'checked' : '' ?>>
+                <label class="form-check-label" for="role-<?= esc($key) ?>">
+                  <strong><?= esc($group['title']) ?></strong> &mdash; <?= esc($group['description']) ?>
+                </label>
+              </div>
+            <?php endforeach; ?>
+          </div>
+          <?php endif; ?>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="email">Email <span class="required">*</span></label>
-          <input type="email" class="form-control" id="email" name="email"
-                 value="<?= old('email', $user_edit->email) ?>" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="password">Password</label>
-          <input type="password" class="form-control" id="password" name="password">
-          <div class="form-help">Kosongkan jika tidak ingin mengubah password. Minimal 8 karakter.</div>
-        </div>
-
-        <?php if (activeGroupCan('users.manage-roles')): ?>
-        <div class="form-group">
-          <label class="form-label">Role <span class="form-help">(bisa pilih lebih dari satu)</span></label>
-          <?php foreach ($groups as $key => $group): ?>
-            <label class="form-check">
-              <input type="checkbox" name="groups[]" value="<?= $key ?>"
-                     <?= in_array($key, $userGroups) ? 'checked' : '' ?>>
-              <span><strong><?= esc($group['title']) ?></strong> — <?= esc($group['description']) ?></span>
-            </label>
-          <?php endforeach; ?>
-        </div>
-        <?php endif; ?>
-
-        <div class="form-actions right">
-          <a href="<?= base_url('admin/users') ?>" class="btn btn-outline">Batal</a>
+        <div class="card-footer d-flex justify-content-end gap-2">
+          <a href="<?= base_url('admin/users') ?>" class="btn btn-outline-secondary">Batal</a>
           <button type="submit" class="btn btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m16.475 5.408l2.117 2.117m-.756-3.482L12.109 9.77a2.1 2.1 0 0 0-.58 1.082L11 13l2.148-.53c.408-.1.787-.3 1.083-.579l5.727-5.727a1.85 1.85 0 1 0-2.617-2.617" />
-            </svg>
-            Perbarui
+            <i class="bi bi-floppy me-1"></i> Perbarui
           </button>
         </div>
       </form>

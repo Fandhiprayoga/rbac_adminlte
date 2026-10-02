@@ -30,6 +30,10 @@ class GroupSwitchController extends BaseController
         $authGroups = config('AuthGroups');
         $groupTitle = $authGroups->groups[$group]['title'] ?? ucfirst($group);
 
-        return redirect()->to('/dashboard')->with('success', "Role aktif diubah ke: {$groupTitle}");
+        // Kembali ke halaman asal jika diminta (mis. dari form profil)
+        $return = (string) $this->request->getPost('return');
+        $target = $return === 'profile' ? '/profile' : '/dashboard';
+
+        return redirect()->to($target)->with('success', "Role aktif diubah ke: {$groupTitle}");
     }
 }

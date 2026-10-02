@@ -33,6 +33,13 @@ class SettingController extends BaseController
         'App.themeSidebarWidth' => '252',
         'App.themeFontSize'   => '14',
         'App.themeMode'       => 'system',
+        'App.themeSidebarBg'  => 'bg-body-secondary',
+        'App.themeSidebarTheme' => 'dark',
+        'App.themeNavbarBg'   => 'bg-body',
+        'App.themeNavbarTheme' => 'light',
+        'App.themeFooterBg'   => 'bg-body',
+        'App.themeFooterTheme' => 'light',
+        'App.themePrimaryColor' => '',
     ];
 
     /**
@@ -295,6 +302,13 @@ class SettingController extends BaseController
             'theme_sidebar_width' => 'required|integer|greater_than_equal_to[200]|less_than_equal_to[320]',
             'theme_font_size'  => 'required|in_list[13,13.5,14,14.5,15,15.5,16]',
             'theme_mode'       => 'required|in_list[system,light,dark]',
+            'theme_sidebar_bg' => 'permit_empty|max_length[40]',
+            'theme_sidebar_theme' => 'permit_empty|in_list[light,dark]',
+            'theme_navbar_bg'  => 'permit_empty|max_length[40]',
+            'theme_navbar_theme' => 'permit_empty|in_list[light,dark]',
+            'theme_footer_bg'  => 'permit_empty|max_length[40]',
+            'theme_footer_theme' => 'permit_empty|in_list[light,dark]',
+            'theme_primary_color' => 'permit_empty|alpha_numeric',
         ];
 
         if (! $this->validate($rules)) {
@@ -305,6 +319,13 @@ class SettingController extends BaseController
         setting('App.themeSidebarWidth', $this->request->getPost('theme_sidebar_width'));
         setting('App.themeFontSize', $this->request->getPost('theme_font_size'));
         setting('App.themeMode', $this->request->getPost('theme_mode'));
+        setting('App.themeSidebarBg', $this->request->getPost('theme_sidebar_bg') ?: 'bg-body-secondary');
+        setting('App.themeSidebarTheme', $this->request->getPost('theme_sidebar_theme') ?: 'dark');
+        setting('App.themeNavbarBg', $this->request->getPost('theme_navbar_bg') ?: 'bg-body');
+        setting('App.themeNavbarTheme', $this->request->getPost('theme_navbar_theme') ?: 'light');
+        setting('App.themeFooterBg', $this->request->getPost('theme_footer_bg') ?: 'bg-body');
+        setting('App.themeFooterTheme', $this->request->getPost('theme_footer_theme') ?: 'light');
+        setting('App.themePrimaryColor', $this->request->getPost('theme_primary_color') ?: '');
 
         return redirect()->to('/admin/settings?tab=appearance')->with('success', 'Pengaturan tampilan berhasil diperbarui.');
     }
@@ -321,7 +342,7 @@ class SettingController extends BaseController
             'general' => ['App.siteName', 'App.siteNameShort', 'App.siteDescription', 'App.siteFooter', 'App.siteVersion', 'App.siteLogo', 'App.siteFavicon'],
             'auth'    => ['App.defaultRole', 'Auth.allowRegistration', 'App.maintenanceMode', 'App.maintenanceMsg'],
             'mail'       => ['Mail.protocol', 'Mail.hostname', 'Mail.port', 'Mail.username', 'Mail.password', 'Mail.encryption', 'Mail.fromEmail', 'Mail.fromName', 'Email.protocol', 'Email.SMTPHost', 'Email.SMTPPort', 'Email.SMTPUser', 'Email.SMTPPass', 'Email.SMTPCrypto', 'Email.fromEmail', 'Email.fromName'],
-            'appearance' => ['App.themePrimary', 'App.themeSidebar', 'App.themeRadius', 'App.themeSidebarWidth', 'App.themeFontSize', 'App.themeMode'],
+            'appearance' => ['App.themePrimary', 'App.themeSidebar', 'App.themeRadius', 'App.themeSidebarWidth', 'App.themeFontSize', 'App.themeMode', 'App.themeSidebarBg', 'App.themeSidebarTheme', 'App.themeNavbarBg', 'App.themeNavbarTheme', 'App.themeFooterBg', 'App.themeFooterTheme', 'App.themePrimaryColor'],
             default      => array_keys($this->defaults),
         };
 
